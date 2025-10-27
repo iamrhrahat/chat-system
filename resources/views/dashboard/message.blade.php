@@ -45,7 +45,7 @@
                 : $conversation->userOne;
         @endphp
 <li>
-<a href="#">
+<a href="{{ route('dashboard.chat', $conversation->id) }}">
 <div class="message_pre_left">
 <div class="message_preview_thumb">
 <img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
@@ -62,10 +62,10 @@
 </div>
 
 </div>
- 
+
 <div class="messge_time">
       @if($conversation->lastMessage)
-                 <span></span>   {{ $conversation->lastMessage->created_at->diffForHumans() }} </span>
+                 <span></span>   {{ $conversation->lastMessage->created_at   }} </span>
                 @endif
 
 </div>
@@ -74,76 +74,13 @@
     @endforelse
 </a>
 </li>
-    
+
 </ul>
 </div>
 </div>
 <div class="messages_chat mb_30">
 <div class="white_box ">
-<div class="single_message_chat">
-<div class="message_pre_left">
-<div class="message_preview_thumb">
-<img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
-</div>
-<div class="messges_info">
-<h4>Travor James</h4>
-<p>Yesterday at 6.33 pm</p>
-</div>
-</div>
-<div class="message_content_view red_border">
-<p>
-Dear KK,
-<br>
-Thank you for your update.
-<br>
-<span>
-We do not sell or share your details without your permission. Find
-out
-more
-in our Privacy Policy. Your username, email and password can be
-updated
-via
-your Codepixar Account settings.
-<br>
-</span>
-Regards,
-</p>
-</div>
-</div>
-<div class="single_message_chat sender_message">
-<div class="message_pre_left">
-<div class="messges_info">
-<h4>Agatha Kristy</h4>
-<p>Yesterday at 6.33 pm</p>
-</div>
-<div class="message_preview_thumb">
-<img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
-</div>
-</div>
-<div class="message_content_view">
-<p>
-Dear KK,
-<br>
-Thank you for your update.
-<br>
-<span>
-We do not sell or share your details without your permission. Find
-out
-more
-in our Privacy Policy. Your username, email and password can be
-updated
-via
-your Codepixar Account settings.
-<br>
-</span>
-Regards,
-</p>
-</div>
-</div>
-<div class="message_send_field">
-<input type="text" placeholder="Write your message" value>
-<button class="btn_1" type="submit">Send</button>
-</div>
+    <h4 style="text-align: center">Open Conversation to Chat</h4>
 </div>
 </div>
 </div>

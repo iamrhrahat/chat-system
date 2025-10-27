@@ -12,18 +12,32 @@ use Illuminate\Support\Facades\Storage;
 class ChatController extends Controller
 {
 
-public function inbox()
+    public function index()
     {
         $userId = Auth::id();
-
-        // Fetch all conversations where the user is either user_one or user_two
         $conversations = Conversation::where('user_one_id', $userId)
-            ->orWhere('user_two_id', $userId)
-            ->with(['userOne', 'userTwo', 'lastMessage'])
-            ->latest('updated_at')
-            ->get();
+        ->orWhere('user_two_id', $userId)
+        ->with(['lastMessage', 'userOne', 'userTwo'])
+        ->latest()
+        ->get();
 
-        return view('dashboard.message', compact('conversations', 'userId'));
+        return view ('dashboard.message', compact('conversations', 'userId'));
     }
 
+    public function show($id)
+    {
+        $userId = Auth::id();
+        $userName = Auth::user()->name;
+        $conversation = Conversation::with(['messages.sender', 'userOne', 'userTwo'])->findOrFail($id);
+
+        if ($conversation->user_one_id !== $userId && $conversation->user_two_id !== $userId) {
+            abort(403, 'Unauthorized');
+        }
+
+        $otherUser = $conversation->user_one_id == $userId
+            ? $conversation->userTwo
+            : $conversation->userOne;
+
+        return view('dashboard.chat', compact('conversation', 'otherUser', 'userId' ,'userName'));
+    }
 }
