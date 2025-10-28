@@ -6,7 +6,7 @@
         </div>
         </div>
         <ul id="sidebar_menu">
-        
+
         <li class>
         <a href="{{route('inbox') }}" aria-expanded="false">
         <div class="icon_menu">
@@ -15,6 +15,6 @@
         <span>Peoples</span>
         </a>
         </li>
-      
+
         </ul>
     </nav>

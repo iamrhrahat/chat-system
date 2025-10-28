@@ -36,6 +36,7 @@
 </form>
 </div>
 </div>
+
 <ul>
     @forelse($conversations as $conversation)
         @php

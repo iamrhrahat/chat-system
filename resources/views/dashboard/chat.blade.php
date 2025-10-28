@@ -36,19 +36,32 @@
 </form>
 </div>
 </div>
+@php
+    $userId = Auth::id();
+
+        $conversations = \App\Models\Conversation::where('user_one_id', $userId)
+            ->orWhere('user_two_id', $userId)
+            ->with(['userOne', 'userTwo', 'lastMessage'])
+            ->latest('updated_at')
+            ->get();
+@endphp
 <ul>
-
+    @forelse($conversations as $conversation)
+        @php
+            // Determine the other participant
+            $otherUser = $conversation->user_one_id == $userId
+                ? $conversation->userTwo
+                : $conversation->userOne;
+        @endphp
 <li>
-    <a href="#">
-        <div class="message_pre_left">
-            <div class="message_preview_thumb">
-                <img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
-            </div>
-
-            <div class="messges_info">
-                <h4>{{ $otherUser->name }}</h4>
-
-                @if($conversation->lastMessage)
+<a href="{{ route('dashboard.chat', $conversation->id) }}">
+<div class="message_pre_left">
+<div class="message_preview_thumb">
+<img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
+</div>
+<div class="messges_info">
+<h4>{{ $otherUser->name }}</h4>
+@if($conversation->lastMessage)
                     <p class="text-gray-600 text-sm truncate w-60 d-flex align-items-center">
                         {{-- If last message is mine, show a reply icon --}}
                         @if($conversation->lastMessage->sender_id == auth()->id())
@@ -60,17 +73,21 @@
                 @else
                     <p class="text-gray-400 text-sm italic">No messages yet</p>
                 @endif
-            </div>
-        </div>
+</div>
 
-        <div class="messge_time">
-            @if($conversation->lastMessage)
-                <span>{{ $conversation->lastMessage->created_at->diffForHumans() }}</span>
-            @endif
-        </div>
-    </a>
+</div>
+
+<div class="messge_time">
+      @if($conversation->lastMessage)
+                 <span></span>   {{ $conversation->lastMessage->created_at   }} </span>
+                @endif
+
+</div>
+@empty
+        <p class="text-gray-500">No conversations yet.</p>
+    @endforelse
+</a>
 </li>
-
 
 </ul>
 </div>
