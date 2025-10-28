@@ -20,17 +20,15 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard/inbox', [ChatController::class, 'index'])->name('inbox');
+
     Route::get('/dashboard/chat/{id}', [ChatController::class, 'show'])->name('dashboard.chat');
-    Route::post('/dashboard/chat/{id}/send', [ChatController::class, 'send'])->name('chat.send');
-    Route::get('/chat/{conversation}/load-more', [ChatController::class, 'loadMore'])->name('chat.loadMore');
-    Route::get('/dashboard/chat/{user}', [ConversationController::class, 'shown'])->name('dashboard.chats');
-
-
+    Route::post('/dashboard/chat/{conversationId}/send', [ChatController::class, 'send'])->name('chat.send');
+    Route::get('/dashboard/chat/start/{userId}', [ChatController::class, 'start'])->name('dashboard.chat.start');
 });
+
 Route::middleware(['auth'])->group(function () {
-    // Route::get('/inbox', [ConversationController::class, 'index'])->name('inbox');
-    Route::get('/chat/{conversation}', [ConversationController::class, 'show'])->name('chat.show');
+    Route::get('/inbox', [ConversationController::class, 'index'])->name('inbox');
+    //Route::get('/dashboard/messages', [ConversationController::class, 'index'])->name('chat.show');
 
     // Route::post('/chat/{conversation}/send', [ChatController::class, 'store'])->name('chat.send');
 });

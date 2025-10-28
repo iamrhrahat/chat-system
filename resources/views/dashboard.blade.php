@@ -46,7 +46,7 @@
     @if(auth()->id() == $user->id)
         <button class="badge_btn_3" disabled style="cursor: not-allowed; opacity: 0.6;">Message</button>
     @else
-        <a href="{{ route('dashboard.chats', $user->id) }}" class="badge_btn_3">Message</a>
+        <a href="{{ route('dashboard.chat', $user->id) }}" class="badge_btn_3">Message</a>
     @endif
 </td>
 

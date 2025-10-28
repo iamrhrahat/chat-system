@@ -10,15 +10,15 @@ class Message extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['conversation_id', 'sender_id', 'body' , 'attachment'];
-
-    public function conversation()
-    {
-        return $this->belongsTo(Conversation::class);
-    }
+    protected $fillable = ['conversation_id', 'sender_id', 'body', 'attachment'];
 
     public function sender()
     {
         return $this->belongsTo(User::class, 'sender_id');
+    }
+
+    public function conversation()
+    {
+        return $this->belongsTo(Conversation::class);
     }
 }
