@@ -1,133 +1,61 @@
 @extends('layout')
 @section('content')
-<div class="main_content_iner ">
-<div class="container-fluid p-0">
-<div class="row justify-content-center">
-<div class="col-12">
-<div class="dashboard_header mb_50">
-<div class="row">
-<div class="col-lg-6">
-<div class="dashboard_header_title">
-<h3> Chat</h3>
+<div class="white_card card_height_100 mb_30 ">
+<div class="white_card_header">
+<div class="box_header m-0">
+<div class="main-title">
+<h3 class="m-0">Community</h3>
 </div>
-</div>
-<div class="col-lg-6">
-<div class="dashboard_breadcam text-end">
-<p><a href="index-2.html">Dashboard</a> <i class="fas fa-caret-right"></i> Chat</p>
-</div>
-</div>
-</div>
-</div>
-</div>
-<div class="col-lg-12">
-<div class="messages_box_area">
-<div class="messages_list">
-<div class="white_box ">
-<div class="white_box_tittle list_header">
-<h4>Conversation List</h4>
-</div>
-<div class="serach_field_2">
-<div class="search_inner">
-<form active="#">
-<div class="search_field">
-<input type="text" placeholder="Search content here...">
-</div>
-<button type="submit"> <i class="ti-search"></i> </button>
-</form>
-</div>
-</div>
-<ul>
-    
-<li>
-<a href="#">
-<div class="message_pre_left">
-<div class="message_preview_thumb">
-<img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
-</div>
-<div class="messges_info">
-<h4>Travor James</h4>
-<p>i know you are doing great</p>
-</div>
-</div>
-<div class="messge_time">
-<span>28th Nov</span>
-</div>
-</a>
-</li>
+<div class="header_more_tool">
+<div class="dropdown">
 
-</ul>
-</div>
-</div>
-<div class="messages_chat mb_30">
-<div class="white_box ">
-<div class="single_message_chat">
-<div class="message_pre_left">
-<div class="message_preview_thumb">
-<img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
-</div>
-<div class="messges_info">
-<h4>Travor James</h4>
-<p>Yesterday at 6.33 pm</p>
-</div>
-</div>
-<div class="message_content_view red_border">
-<p>
-Dear KK,
-<br>
-Thank you for your update.
-<br>
-<span>
-We do not sell or share your details without your permission. Find
-out
-more
-in our Privacy Policy. Your username, email and password can be
-updated
-via
-your Codepixar Account settings.
-<br>
-</span>
-Regards,
-</p>
-</div>
-</div>
-<div class="single_message_chat sender_message">
-<div class="message_pre_left">
-<div class="messges_info">
-<h4>Agatha Kristy</h4>
-<p>Yesterday at 6.33 pm</p>
-</div>
-<div class="message_preview_thumb">
-<img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
-</div>
-</div>
-<div class="message_content_view">
-<p>
-Dear KK,
-<br>
-Thank you for your update.
-<br>
-<span>
-We do not sell or share your details without your permission. Find
-out
-more
-in our Privacy Policy. Your username, email and password can be
-updated
-via
-your Codepixar Account settings.
-<br>
-</span>
-Regards,
-</p>
-</div>
-</div>
-<div class="message_send_field">
-<input type="text" placeholder="Write your message" value>
-<button class="btn_1" type="submit">Send</button>
+
 </div>
 </div>
 </div>
 </div>
-</div>
+<div class="white_card_body QA_section">
+<div class="QA_table ">
+
+<div id="DataTables_Table_0_wrapper" class="dataTables_wrapper no-footer"><table class="table lms_table_active2 p-0 dataTable no-footer dtr-inline" id="DataTables_Table_0" role="grid" style="width: 722px;">
+<thead>
+<tr role="row">
+    <th scope="col" class="sorting_asc" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 175px;" aria-sort="ascending" aria-label="Customer: activate to sort column descending">Users</th>
+    <th style="text-align: right" scope="col" class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 137px;" aria-label="Status: activate to sort column ascending">Intro</th>
+        <th style="text-align: right" scope="col" class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 137px;" aria-label="Status: activate to sort column ascending">Gender</th>
+    <th style="text-align: right" scope="col" class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1" colspan="1" style="width: 137px;" aria-label="Status: activate to sort column ascending">Message</th>
+</tr>
+</thead>
+@php
+    $users = \App\Models\User::all();
+@endphp
+
+@foreach ($users as $user)
+<tr role="row" class="odd">
+    <td tabindex="0" class="sorting_1">
+        <div class="customer d-flex align-items-center">
+            <div class="thumb_34 mr_15 mt-0">
+                <img class="img-fluid radius_50" src="{{ asset('asset/dashboard/img/customers/1.png') }}" alt="">
+            </div>
+            <span class="f_s_14 f_w_400 color_text_1">{{ $user->name }}</span>
+        </div>
+    </td>
+    <td class="f_s_14 f_w_400 text-end">Intro</td>
+    <td class="f_s_14 f_w_400 text-end">Male</td>
+    <td class="f_s_14 f_w_400 text-end">
+    @if(auth()->id() == $user->id)
+        <button class="badge_btn_3" disabled style="cursor: not-allowed; opacity: 0.6;">Message</button>
+    @else
+        <a href="{{ route('dashboard.chats', $user->id) }}" class="badge_btn_3">Message</a>
+    @endif
+</td>
+
+</tr>
+@endforeach
+
+
+</tbody>
+</table></div>
 </div>
 </div>
 </div>

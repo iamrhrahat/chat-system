@@ -39,6 +39,31 @@
 
         <link rel="stylesheet" href="{{ asset('asset/dashboard/css/style1.css') }}" />
         <link rel="stylesheet" href="{{ asset('asset/dashboard/css/colors/default.css') }}" id="colorSkinCSS">
+        <style>
+            .emoji-picker {
+    z-index: 99999 !important;
+}
+            /* Fix z-index and position of emoji tray */
+.emoji-picker {
+    z-index: 99999 !important;
+    position: absolute !important;
+    bottom: 50px !important;
+    left: 10px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 12px;
+    background: #fff;
+}
+
+/* Make emoji picker responsive */
+@media (max-width: 768px) {
+    .emoji-picker {
+        left: 0 !important;
+        width: 95% !important;
+    }
+}
+
+
+        </style>
 </head>
 <body class="crm_body_bg">
 

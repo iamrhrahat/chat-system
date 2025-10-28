@@ -40,4 +40,43 @@ class ChatController extends Controller
 
         return view('dashboard.chat', compact('conversation', 'otherUser', 'userId' ,'userName'));
     }
+
+    public function send(Request $request, $conversationId)
+{
+    $request->validate([
+        'body' => 'nullable|string|max:1000',
+        'attachment' => 'nullable|file|max:2048',
+    ]);
+
+    $conversation = Conversation::findOrFail($conversationId);
+
+    // Security: only conversation participants can send messages
+    $userId = auth()->id();
+    if ($conversation->user_one_id !== $userId && $conversation->user_two_id !== $userId) {
+        abort(403, 'Unauthorized');
+    }
+
+    // Handle file upload
+    $path = null;
+    if ($request->hasFile('attachment')) {
+        $path = $request->file('attachment')->store('attachments', 'public');
+    }
+
+    // Create message
+    $message = $conversation->messages()->create([
+        'sender_id' => $userId,
+        'body' => $request->body ?? '',
+        'attachment' => $path,
+    ]);
+
+    // ✅ Update conversation’s last message reference & updated_at timestamp
+    $conversation->update([
+        'last_message_id' => $message->id,
+        'updated_at' => now(),
+    ]);
+
+    return back();
+}
+
+
 }

@@ -53,7 +53,12 @@
 <div class="messges_info">
 <h4>{{ $otherUser->name }}</h4>
 @if($conversation->lastMessage)
-                    <p class="text-gray-600 text-sm truncate w-60">
+                    <p class="text-gray-600 text-sm truncate w-60 d-flex align-items-center">
+                        {{-- If last message is mine, show a reply icon --}}
+                        @if($conversation->lastMessage->sender_id == auth()->id())
+                            <i class="fa fa-reply me-1 text-primary" title="You replied"></i>
+                        @endif
+
                         {{ $conversation->lastMessage->body }}
                     </p>
                 @else

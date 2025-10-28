@@ -44,29 +44,33 @@
             <div class="message_preview_thumb">
                 <img src="{{ asset('asset/dashboard/img/messages/1.png')}}" alt>
             </div>
+
             <div class="messges_info">
                 <h4>{{ $otherUser->name }}</h4>
 
                 @if($conversation->lastMessage)
-                    <p class="text-gray-600 text-sm truncate w-60">
+                    <p class="text-gray-600 text-sm truncate w-60 d-flex align-items-center">
+                        {{-- If last message is mine, show a reply icon --}}
+                        @if($conversation->lastMessage->sender_id == auth()->id())
+                            <i class="fa fa-reply me-1 text-primary" title="You replied"></i>
+                        @endif
+
                         {{ $conversation->lastMessage->body }}
                     </p>
                 @else
                     <p class="text-gray-400 text-sm italic">No messages yet</p>
                 @endif
-</div>
+            </div>
+        </div>
 
-</div>
-
-<div class="messge_time">
-      @if($conversation->lastMessage)
-                 <span></span>   {{ $conversation->lastMessage->created_at }} </span>
-                @endif
-
-</div>
-
-</a>
+        <div class="messge_time">
+            @if($conversation->lastMessage)
+                <span>{{ $conversation->lastMessage->created_at->diffForHumans() }}</span>
+            @endif
+        </div>
+    </a>
 </li>
+
 
 </ul>
 </div>
@@ -97,7 +101,16 @@
                             word-wrap: break-word;"
                  class="message_content_view red_border">
                     <p>{{ $message->body }}</p>
+
+
                 </div>
+                 @if($message->attachment)
+                        <div class="mt-2">
+                            <a href="{{ asset('storage/' . $message->attachment) }}" target="_blank">
+                                📎 View Attachment
+                            </a>
+                        </div>
+                    @endif
                 <p style="text-align: right">{{ $message->created_at  }}</p>
             </div>
             @else
@@ -108,8 +121,16 @@
                             border-radius: 10px;
                             word-wrap: break-word;" class="message_content_view">
                 <p>{{ $message->body }}</p>
+
             </div>
-            <p style="text-align: right">{{ $message->created_at  }}</p>
+             @if($message->attachment)
+                        <div class="mt-2">
+                            <a href="{{ asset('storage/' . $message->attachment) }}" target="_blank">
+                                📎 View Attachment
+                            </a>
+                        </div>
+                    @endif
+            <p style="text-align: left">{{ $message->created_at  }}</p>
         </div>
     @endif
     @empty
@@ -118,8 +139,43 @@
 </div>
 
         <div class="message_send_field">
-        <input type="text" placeholder="Write your message" value>
-        <button class="btn_1" type="submit">Send</button>
+        <form action="{{ route('chat.send', $conversation->id) }}" method="POST" enctype="multipart/form-data">
+    @csrf
+
+    <div class="message_send_field d-flex align-items-center p-2 border-top" style="background: #fff; border-radius: 8px; position: relative;">
+    {{-- Emoji Button --}}
+    <button type="button" id="emoji-btn" class="btn btn-light me-2" style="border-radius: 50%; font-size: 20px;">
+        😊
+    </button>
+
+    {{-- Message Input --}}
+    <div class="flex-grow-1 position-relative">
+        <input type="text"
+               name="body"
+               id="message-input"
+               class="form-control"
+               placeholder="Write your message..."
+               required
+               style="border-radius: 20px; padding-left: 12px; padding-right: 40px;">
+
+        {{-- Attachment --}}
+        <label for="attachment"
+               class="position-absolute end-0 top-50 translate-middle-y me-3"
+               style="cursor: pointer;">
+            <i class="fa fa-paperclip"></i>
+        </label>
+        <input type="file"
+               id="attachment"
+               name="attachment"
+               class="d-none"
+               accept="image/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+    </div>
+
+    {{-- Send Button --}}
+    <button class="btn btn-primary ms-2" type="submit" style="border-radius: 20px;">Send</button>
+</div>
+
+</form>
         </div>
     </div>
 </div>
@@ -128,4 +184,40 @@
 </div>
 </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/@joeattardi/emoji-button@4.6.2/dist/index.min.js"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const button = document.querySelector('#emoji-btn');
+    const input = document.querySelector('#message-input');
+
+    if (!button || !input) {
+        console.error("❌ Emoji button or message input not found.");
+        return;
+    }
+
+    // ✅ Use window.EmojiButton (fixes undefined issue in some builds)
+    const picker = new window.EmojiButton({
+        position: 'top-end',
+        theme: 'light',
+        autoHide: false,
+        showSearch: false,
+    });
+
+    // When emoji is selected
+    picker.on('emoji', emoji => {
+        input.value += emoji;
+        input.focus();
+    });
+
+    // Toggle the picker
+    button.addEventListener('click', (e) => {
+        e.preventDefault();
+        picker.togglePicker(button);
+    });
+});
+</script>
+
+
+
 @endsection
